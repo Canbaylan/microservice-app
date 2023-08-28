@@ -3,6 +3,8 @@ package com.canbaylan.inventoryservice.service;
 import com.canbaylan.inventoryservice.dto.InventoryResponse;
 import com.canbaylan.inventoryservice.repository.InventoryRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,13 +14,17 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class InventoryService {
 
 
     private final InventoryRepository inventoryRepository;
 
     @Transactional(readOnly = true)
-    public List<InventoryResponse> isInStock(List<String> skuCode){
+    @SneakyThrows
+    public List<InventoryResponse> isInStock(List<String> skuCode) {
+        log.info("isInStock exec");
+        //Thread.sleep(10000);
         return inventoryRepository.findBySkuCodeIn(skuCode).stream()
                 .map(inventory ->
                     InventoryResponse.builder()
